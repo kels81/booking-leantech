@@ -40,9 +40,9 @@ public class BookingApplicationTests {
         bkng.setNumeroMenores(1);
 
         Booking bk = new Booking();
-        bk.setId(1L);
-        bk.setFechaIngreso(LocalDate.now());
-        bk.setFechaSalida(LocalDate.now());
+        bk.setId(null);
+        bk.setFechaIngreso(LocalDate.of(2021,11,12));
+        bk.setFechaSalida(LocalDate.of(2021,11,13));
         bk.setTitularReserva("Pedro Paramo");
         bk.setNumeroHabitaciones(1);
         bk.setNumeroPersonas(2);
@@ -50,7 +50,7 @@ public class BookingApplicationTests {
         bk.setTotalDias(2L);
 
         when(repository.save(bk)).thenReturn(bk);
-        assertNotNull(service.addBooking(bkng));
+        assertEquals(bk, service.addBooking(bkng));
     }
 
     @Test
@@ -59,7 +59,7 @@ public class BookingApplicationTests {
                 .thenReturn(Stream.of(new Booking(1L, "Sonia Morales", 2, 1, 1, LocalDate.of(2021, 1, 10), LocalDate.of(2021, 1, 15), 5L),
                         new Booking(1L, "Hugo Sanchez", 2, 1, 1, LocalDate.of(2021, 1, 10), LocalDate.of(2021, 1, 15), 5L))
                         .collect(Collectors.toList()));
-        assertEquals(1, service.findAllBookings().size());
+        assertEquals(2, service.findAllBookings().size());
     }
 
     @Test

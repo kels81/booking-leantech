@@ -11,7 +11,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-@EnableAsync//de mas
+@EnableAsync
 public class SwaggerUIConfig {
     
     @Bean
@@ -21,7 +21,6 @@ public class SwaggerUIConfig {
                 .apis(
                         RequestHandlerSelectors
                         .basePackage("com.leantech.booking")
-                        //.any()
                 )
                 .paths(PathSelectors.any())
                 .build();

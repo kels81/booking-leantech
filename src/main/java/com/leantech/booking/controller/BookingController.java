@@ -1,5 +1,6 @@
 package com.leantech.booking.controller;
 
+import com.leantech.booking.config.MessagingConfig;
 import com.leantech.booking.model.BadRequest;
 import com.leantech.booking.model.Booking;
 import com.leantech.booking.model.BookingRequest;
@@ -37,8 +38,6 @@ public class BookingController {
     private Object response;
 
     private HttpStatus httpStatus;
-
-    private String statusRabbit;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -101,11 +100,11 @@ public class BookingController {
 
         //RabbitMq
         if (httpStatus.name().equals("CREATED")) {
-//        BookingStatus bookingStatus = new BookingStatus(addBooking, null, httpStatus.name(), addBooking.getTitularReserva(), "booking succesfully to " + addBooking.getTitularReserva());
-//        rabbitTemplate.convertAndSend(MessagingConfig.EXCHANGE, MessagingConfig.ROUTING_KEY, bookingStatus);
+        BookingStatus bookingStatus = new BookingStatus(addBooking, null, httpStatus.name(), addBooking.getTitularReserva(), "booking succesfully to " + addBooking.getTitularReserva());
+        rabbitTemplate.convertAndSend(MessagingConfig.EXCHANGE, MessagingConfig.ROUTING_KEY, bookingStatus);
         } else {
-//        BookingStatus bookingStatus = new BookingStatus(null, badRequ, httpStatus.name(), addBooking.getTitularReserva(), "booking error to " + addBooking.getTitularReserva());
-//        rabbitTemplate.convertAndSend(MessagingConfig.EXCHANGE, MessagingConfig.ROUTING_KEY, bookingStatus);
+        BookingStatus bookingStatus = new BookingStatus(null, badRequ, httpStatus.name(), addBooking.getTitularReserva(), "booking error to " + addBooking.getTitularReserva());
+        rabbitTemplate.convertAndSend(MessagingConfig.EXCHANGE, MessagingConfig.ROUTING_KEY, bookingStatus);
         }
         return new ResponseEntity<>(response, httpStatus);
     }
@@ -132,13 +131,4 @@ public class BookingController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    @PostMapping("/email")
-//    public String sendEmail(@RequestBody EmailTemplate email) {
-//        try {
-//            bookingService.sendTextEmail(email);
-//            return "Email sent!";
-//        } catch (MailException e) {
-//            return "Eror in sending email " + e;
-//        }
-//    }
 }

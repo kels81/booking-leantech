@@ -25,8 +25,7 @@ public class Consumer {
         System.out.println("Message recieved from queue : " + bookingStatus);
         EmailTemplate email = new EmailTemplate();
         if (bookingStatus.getStatus().equals("CREATED")) {
-            //email.setSendTo(bookingStatus.getBooking().getTitularReserva().concat("@gmail.com"));
-            email.setSendTo("edrdcortes@gmail.com");
+            email.setSendTo(bookingStatus.getBooking().getTitularReserva().concat("@gmail.com"));
             email.setSubject("Confirmación de Reserva");
             email.setBody(makeBodySuccess(bookingStatus.getBooking()));
         } 

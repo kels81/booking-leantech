@@ -5,10 +5,8 @@ import com.leantech.booking.model.BadRequest;
 import com.leantech.booking.model.BadRequestError;
 import com.leantech.booking.model.Booking;
 import com.leantech.booking.model.BookingRequest;
-import com.leantech.booking.model.BookingStatus;
 import com.leantech.booking.model.EmailTemplate;
 import com.leantech.booking.model.Error;
-import com.leantech.booking.model.ResourceNotFound;
 import com.leantech.booking.repository.BookingRepository;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,8 +16,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -130,37 +126,6 @@ public class BookingService {
         } catch (MailException e) {
             return "Eror in sending email " + e;
         }
-    }
-
-    public String sendTextEmail(Booking bkng) {
-        
-        
-
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(bkng.getTitularReserva().concat("@booking.com"));
-        message.setSubject("Confirmación de Reserva");
-        message.setText(makeBody(bkng));
-
-        try {
-            javaMailSender.send(message);
-            return "Email sent!";
-        } catch (MailException e) {
-            return "Eror in sending email " + e;
-        }
-    }
-
-    private String makeBody(Booking bkng) {
-        return  "Hola," + bkng.getTitularReserva() + "\n"
-                + "\n"
-                + "Gracias por elegir Hotel Paraiso. ¡Estamos deseando alojarte!\n"
-                + "\n"
-                + "Este mensaje es una confirmación de tu reserva para las fechas " + bkng.getFechaIngreso() + " al " + bkng.getFechaSalida() + "\n"
-                + "\n"
-                + "Aquí te dejamos todos los detalles de tu reserva:\n"
-                + "Número de confirmación de reserva: " + bkng.getId() + "\n"
-                + "Fecha de llegada: " + bkng.getFechaIngreso() + "\n"
-                + "Fecha de salida: " + bkng.getFechaSalida() + "\n"
-                + "Total de personas: " + bkng.getNumeroPersonas();
     }
 
 }

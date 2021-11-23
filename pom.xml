@@ -69,11 +69,6 @@
                 </dependency>
                 
                 <!--SpringFox dependencies -->
-<!--                <dependency>
-                        <groupId>io.springfox</groupId>
-                        <artifactId>springfox-oas</artifactId>
-                        <version>3.0.0</version>
-                </dependency>-->
                 <dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
@@ -101,13 +96,6 @@
                         <version>4.13.2</version>
                         <scope>test</scope>
                 </dependency>
-<!--	 <dependency>
-	  <groupId>junit</groupId>
-	  <artifactId>junit</artifactId>
-	  <version>4.13.2</version>
-	  <scope>test</scope>
-	  <type>jar</type>
-	 </dependency>-->
 	</dependencies>
 
 	<build>
@@ -125,7 +113,7 @@
                                 </configuration>
                         </plugin>-->
 		</plugins>
-                <finalName>booking-docker</finalName>
+                <finalName>booking</finalName>
 	</build>
 
 </project>

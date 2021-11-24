@@ -4,7 +4,12 @@ import com.leantech.booking.model.Booking;
 import com.leantech.booking.model.BookingRequest;
 import com.leantech.booking.repository.BookingRepository;
 import com.leantech.booking.service.BookingService;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,26 +34,27 @@ public class BookingApplicationTests {
     private BookingRepository repository;
 
     @Test
-    public void addBookingTest() {
-
+    public void addBookingTest() throws ParseException {
         BookingRequest bkng = new BookingRequest();
         bkng.setFechaIngreso("2021-11-12");
         bkng.setFechaSalida("2021-11-13");
         bkng.setTitularReserva("Pedro Paramo");
+        bkng.setEmailTitular("pedro@mail.com");
         bkng.setNumeroHabitaciones(1);
         bkng.setNumeroPersonas(2);
         bkng.setNumeroMenores(1);
 
         Booking bk = new Booking();
         bk.setId(null);
-        bk.setFechaIngreso(LocalDate.of(2021,11,12));
-        bk.setFechaSalida(LocalDate.of(2021,11,13));
+        bk.setFechaIngreso(Date.from(LocalDate.of(2021,11,12).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        bk.setFechaSalida(Date.from(LocalDate.of(2021,11,13).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         bk.setTitularReserva("Pedro Paramo");
+        bk.setEmailTitular("pedro@mail.com");
         bk.setNumeroHabitaciones(1);
         bk.setNumeroPersonas(2);
         bk.setNumeroMenores(1);
         bk.setTotalDias(2L);
-
+        
         when(repository.save(bk)).thenReturn(bk);
         assertEquals(bk, service.addBooking(bkng));
     }
@@ -56,8 +62,10 @@ public class BookingApplicationTests {
     @Test
     public void findAllBookingsTest() {
         when(repository.findAll())
-                .thenReturn(Stream.of(new Booking(1L, "Sonia Morales", 2, 1, 1, LocalDate.of(2021, 1, 10), LocalDate.of(2021, 1, 15), 5L),
-                        new Booking(1L, "Hugo Sanchez", 2, 1, 1, LocalDate.of(2021, 1, 10), LocalDate.of(2021, 1, 15), 5L))
+                .thenReturn(Stream.of(
+                        new Booking(1L, "Sonia Morales", "sonia@email.com", 2, 1, 1, Date.from(LocalDate.of(2021, 1, 10).atStartOfDay(ZoneId.systemDefault()).toInstant()), Date.from(LocalDate.of(2021, 1, 15).atStartOfDay(ZoneId.systemDefault()).toInstant()), 5L),
+                        new Booking(1L, "Hugo Sanchez", "hugo@email.com", 2, 1, 1, Date.from(LocalDate.of(2021, 1, 10).atStartOfDay(ZoneId.systemDefault()).toInstant()), Date.from(LocalDate.of(2021, 1, 15).atStartOfDay(ZoneId.systemDefault()).toInstant()), 5L)
+                        )
                         .collect(Collectors.toList()));
         assertEquals(2, service.findAllBookings().size());
     }
@@ -65,7 +73,9 @@ public class BookingApplicationTests {
     @Test
     public void findBookingByIdTest() {
         when(repository.findBookingById(anyLong()))
-                .thenReturn(Optional.of(new Booking(1L, "Julio Preciado", 6, 2, 3, LocalDate.of(2021, 1, 10), LocalDate.of(2021, 1, 15), 5L)));
+                .thenReturn(Optional.of(
+                        new Booking(1L, "Julio Preciado", "julio@email.com", 6, 2, 3, Date.from(LocalDate.of(2021, 1, 10).atStartOfDay(ZoneId.systemDefault()).toInstant()), Date.from(LocalDate.of(2021, 1, 15).atStartOfDay(ZoneId.systemDefault()).toInstant()), 5L)
+                        ));
 
         assertNotNull(service.findBookingById(1L));
     }
@@ -74,9 +84,10 @@ public class BookingApplicationTests {
     public void updateBookingTest() {
         Booking bk = new Booking();
         bk.setId(1L);
-        bk.setFechaIngreso(LocalDate.now());
-        bk.setFechaSalida(LocalDate.now());
+        bk.setFechaIngreso(new Date());
+        bk.setFechaSalida(new Date());
         bk.setTitularReserva("Laura Romo");
+        bk.setEmailTitular("laura@mail.com");
         bk.setNumeroHabitaciones(1);
         bk.setNumeroPersonas(2);
         bk.setNumeroMenores(1);
@@ -90,9 +101,10 @@ public class BookingApplicationTests {
     public void deleteBookingTest() {
         Booking bk = new Booking();
         bk.setId(1L);
-        bk.setFechaIngreso(LocalDate.of(2021, 10, 21));
-        bk.setFechaSalida(LocalDate.of(2021, 11, 10));
+        bk.setFechaIngreso(Date.from(LocalDate.of(2021, 10, 21).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        bk.setFechaSalida(Date.from(LocalDate.of(2021, 10, 22).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         bk.setTitularReserva("Carlos Trejo");
+        bk.setEmailTitular("carlos@mail.com");
         bk.setNumeroHabitaciones(2);
         bk.setNumeroPersonas(10);
         bk.setNumeroMenores(3);

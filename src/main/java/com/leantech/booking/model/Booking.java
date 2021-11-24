@@ -1,7 +1,8 @@
 package com.leantech.booking.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,23 +21,25 @@ import lombok.ToString;
 @ToString
 @Entity
 public class Booking implements Serializable {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
     private Long id;
     @NotEmpty(message = "{titularReserva.empty}")
     private String titularReserva;
-    @Digits(integer =10,fraction = 0)
+    @NotEmpty(message = "{emailTitular.empty}")
+    private String emailTitular;
+    @Digits(integer = 10, fraction = 0)
     private int numeroPersonas;
-    @Digits(integer =10,fraction = 0)
+    @Digits(integer = 10, fraction = 0)
     private int numeroHabitaciones;
-    @Digits(integer =10,fraction = 0)
+    @Digits(integer = 10, fraction = 0)
     private int numeroMenores;
     @NotEmpty(message = "{fechaIngreso.empty}")
-    private LocalDate fechaIngreso;
+    private Date fechaIngreso;
     @NotEmpty(message = "{fechaSalida.empty}")
-    private LocalDate fechaSalida;
+    private Date fechaSalida;
     private Long totalDias;
-    
+
 }

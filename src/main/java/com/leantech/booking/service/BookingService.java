@@ -16,6 +16,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -37,8 +39,8 @@ public class BookingService {
         booking.setNumeroHabitaciones(bReq.getNumeroHabitaciones());
         booking.setNumeroPersonas(bReq.getNumeroPersonas());
         booking.setNumeroMenores(bReq.getNumeroMenores());
-        booking.setFechaIngreso(convertStrDate1(bReq.getFechaIngreso()));
-        booking.setFechaSalida(convertStrDate1(bReq.getFechaSalida()));
+        booking.setFechaIngreso(convertStrDate(bReq.getFechaIngreso()));
+        booking.setFechaSalida(convertStrDate(bReq.getFechaSalida()));
         booking.setTotalDias(getTotalDias(bReq));
         return bookingRepository.save(booking);
     }
@@ -65,6 +67,17 @@ public class BookingService {
 
         return LocalDate.parse(strFecha, inputFormatter);
     }
+    
+    private Date convertStrDate(String strFecha) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+            
+            return sdf.parse(strFecha);
+        } catch (ParseException ex) {
+            Logger.getLogger(BookingService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new Date();
+    }
 
     private Long getTotalDias(BookingRequest bReq) {
         LocalDate dateStart = LocalDate.parse(bReq.getFechaIngreso());
@@ -84,6 +97,9 @@ public class BookingService {
         }
         if (strDataValid(booking.getTitularReserva())) {
             return new BadRequest(400, new BadRequestError(400, msg, List.of(new Error(400, "titularReserva", "el titular de la reserva no puede estar vacio"))));
+        }
+        if (strDataValid(booking.getEmailTitular())) {
+            return new BadRequest(400, new BadRequestError(400, msg, List.of(new Error(400, "emailTitular", "el email del titular de la reserva no puede estar vacio"))));
         }
         if (!strDataDateValid(booking.getFechaIngreso())) {
             return new BadRequest(400, new BadRequestError(400, msg, List.of(new Error(400, "fechaIngreso", "la fecha de ingreso no puede estar vacio"))));
